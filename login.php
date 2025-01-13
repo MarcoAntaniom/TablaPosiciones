@@ -17,9 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         $query = "SELECT u.*, tu.id AS tipo_usuario_id, tu.descripcion AS tipo_usuario
-                FROM usuarios u
-                LEFT JOIN tipo_usuario tu ON u.tipo_usuario_id = tu.id
-                WHERE u.rut = :rut";
+                  FROM usuarios u
+                  LEFT JOIN tipo_usuario tu ON u.tipo_usuario_id = tu.id
+                  WHERE u.rut = :rut";
         $stmt = $conexion->prepare($query);
         $stmt->bindParam(":rut", $rut);
         $stmt->execute();

@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       </div>
       <div class="card-body">
         <!-- Aquí iría el contenido que deseas mostrar -->
-         <form  method="POST" enctype="multipart/form-data">
+         <form method="post" enctype="multipart/form-data">
             <div class="form-group">
               <label for="nombre">Nombre del equipo:</label>
               <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre del equipo">
