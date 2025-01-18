@@ -13,7 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($tmp_escudo != '') {
         $rutaDestino = "/opt/lampp/htdocs/TablaPosiciones/escudos/" . $nombreArchivoEscudo;
         if (!move_uploaded_file($tmp_escudo, $rutaDestino)) {
-            die("Error al subir el archivo.");
+            echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al subir el archivo.'
+                });
+            </script>";
+            exit();
         }
     }
 
@@ -24,9 +31,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sentencia->bindParam(":escudo", $nombreArchivoEscudo);
         $sentencia->execute();
 
-        echo "Equipo creado con éxito.";
+        echo "<script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Éxito',
+                text: 'Equipo creado con éxito.'
+            }).then(function() {
+                window.location = 'crear_equipo.php';
+            });
+        </script>";
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error al crear el equipo: " . $e->getMessage() . "'
+            });
+        </script>";
     }
 }
 ?>
@@ -56,36 +77,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- Default box -->
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Crear Equipo</h3>
-
-        <div class="card-tools">
-          <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-            <i class="fas fa-minus"></i>
-          </button>
-          <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
+        <h3 class="card-title">Nuevo Equipo</h3>
       </div>
       <div class="card-body">
-        <!-- Aquí iría el contenido que deseas mostrar -->
-         <form method="post" enctype="multipart/form-data">
-            <div class="form-group">
-              <label for="nombre">Nombre del equipo:</label>
-              <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre del equipo">
-            </div>
-            <div class="form-group">
-              <label for="escudo">Escudo del equipo:</label>
-              <input type="file" class="form-control" id="escudo" name="escudo" placeholder="Escudo del equipo">
-            </div>
-            <button type="submit" class="btn btn-primary">Crear equipo</button>
-          </form>
+        <form action="crear_equipo.php" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="nombre">Nombre del Equipo</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
+          </div>
+          <div class="form-group">
+            <label for="escudo">Escudo del Equipo</label>
+            <input type="file" class="form-control" id="escudo" name="escudo" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Crear Equipo</button>
+        </form>
       </div>
-      <!-- /.card-body -->
-      <div class="card-footer">
-        Footer
-      </div>
-      <!-- /.card-footer-->
     </div>
     <!-- /.card -->
 

@@ -1,4 +1,3 @@
-
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
   <!-- Control sidebar content goes here -->
@@ -40,9 +39,27 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="<?php echo $rutaBase; ?>dist/js/pages/dashboard2.js"></script>
 
-<!-- Script to fix footer position -->
+<!-- TABLES PLUGINS -->
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="<?php echo $rutaBase; ?>plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="<?php echo $rutaBase; ?>plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+<!-- DataTables JS -->
+<script src="<?php echo $rutaBase; ?>plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?php echo $rutaBase; ?>plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="<?php echo $rutaBase; ?>plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="<?php echo $rutaBase; ?>plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
 <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
+    // Inicializar DataTables solo para la tabla con id "example1"
+    $('#example1').DataTable({
+      "responsive": true,
+      "lengthChange": false,
+      "autoWidth": false,
+    });
+
+    // Script para ajustar el pie de página
     function adjustFooter() {
       var docHeight = $(window).height();
       var footerHeight = $('.main-footer').outerHeight();
@@ -59,5 +76,6 @@
     $(window).resize(adjustFooter);
   });
 </script>
+
 </body>
 </html>
