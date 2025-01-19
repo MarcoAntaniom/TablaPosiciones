@@ -16,62 +16,103 @@
 <!-- ./wrapper -->
 
 <!-- REQUIRED SCRIPTS -->
-<!-- jQuery -->
-<script src="<?php echo $rutaBase; ?>plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap -->
-<script src="<?php echo $rutaBase; ?>plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- overlayScrollbars -->
-<script src="<?php echo $rutaBase; ?>plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-<!-- AdminLTE App -->
+
+<!-- Bootstrap 4 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- AdminLTE -->
 <script src="<?php echo $rutaBase; ?>dist/js/adminlte.js"></script>
 
-<!-- PAGE PLUGINS -->
-<!-- jQuery Mapael -->
-<script src="<?php echo $rutaBase; ?>plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-<script src="<?php echo $rutaBase; ?>plugins/raphael/raphael.min.js"></script>
-<script src="<?php echo $rutaBase; ?>plugins/jquery-mapael/jquery.mapael.min.js"></script>
-<script src="<?php echo $rutaBase; ?>plugins/jquery-mapael/maps/usa_states.min.js"></script>
-<!-- ChartJS -->
-<script src="<?php echo $rutaBase; ?>plugins/chart.js/Chart.min.js"></script>
-
-<!-- AdminLTE for demo purposes -->
-<script src="<?php echo $rutaBase; ?>dist/js/demo.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo $rutaBase; ?>dist/js/pages/dashboard2.js"></script>
-
-<!-- TABLES PLUGINS -->
-<!-- DataTables CSS -->
-<link rel="stylesheet" href="<?php echo $rutaBase; ?>plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="<?php echo $rutaBase; ?>plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-
-<!-- DataTables JS -->
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables  & Plugins -->
 <script src="<?php echo $rutaBase; ?>plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?php echo $rutaBase; ?>plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="<?php echo $rutaBase; ?>plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="<?php echo $rutaBase; ?>plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="<?php echo $rutaBase; ?>plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="<?php echo $rutaBase; ?>plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="<?php echo $rutaBase; ?>plugins/jszip/jszip.min.js"></script>
+<script src="<?php echo $rutaBase; ?>plugins/pdfmake/pdfmake.min.js"></script>
+<script src="<?php echo $rutaBase; ?>plugins/pdfmake/vfs_fonts.js"></script>
+<script src="<?php echo $rutaBase; ?>plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="<?php echo $rutaBase; ?>plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="<?php echo $rutaBase; ?>plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+<!-- Script para inicializar DataTables -->
+<script>
+  $(document).ready(function() {
+    // Función para inicializar DataTable con las opciones comunes
+    function initializeDataTable(tableId, options) {
+      var tableElement = $(`#${tableId}`);
+      if (tableElement.length > 0 && tableElement.is('table')) {
+        if ($.fn.DataTable.isDataTable(`#${tableId}`)) {
+          $(`#${tableId}`).DataTable().destroy();
+        }
+        $(`#${tableId}`).DataTable({
+          responsive: true,
+          lengthChange: options.lengthChange !== undefined ? options.lengthChange : false,
+          autoWidth: options.autoWidth !== undefined ? options.autoWidth : false,
+          buttons: options.buttons || [],
+          paging: options.paging !== undefined ? options.paging : true,
+          searching: options.searching !== undefined ? options.searching : true,
+          ordering: options.ordering !== undefined ? options.ordering : true,
+          info: options.info !== undefined ? options.info : true
+        }).buttons().container().appendTo(`#${tableId}_wrapper .col-md-6:eq(0)`);
+      }
+    }
+
+    // Opciones comunes para las tablas
+    var commonOptions = {
+      buttons: ["copy", "excel", "pdf", "print", "colvis"],
+      paging: true,
+      searching: true,
+      ordering: true,
+      info: false
+    };
+
+    // Inicializar varias tablas
+    var tablesToInitialize = ["marcaciones", "pendientes", "capacitacion", "example1", "example2", "Aceptadas", "calificaciones"];
+    tablesToInitialize.forEach(function(tableId) {
+      initializeDataTable(tableId, commonOptions);
+    });
+
+    // Inicialización para la tabla 'noticias' sin ordenamiento
+    var noticiasOptions = {
+      buttons: ["copy", "excel", "pdf", "print", "colvis"],
+      paging: true,
+      searching: true,
+      ordering: false,  // Desactiva el ordenamiento
+      info: false
+    };
+    initializeDataTable("noticias", noticiasOptions);
+  });
+</script>
 
 <script>
   $(document).ready(function () {
-    // Inicializar DataTables solo para la tabla con id "example1"
-    $('#example1').DataTable({
-      "responsive": true,
-      "lengthChange": false,
-      "autoWidth": false,
-    });
-
-    // Script para ajustar el pie de página
+    // Función para ajustar la posición del pie de página
     function adjustFooter() {
       var docHeight = $(window).height();
       var footerHeight = $('.main-footer').outerHeight();
       var footerTop = $('.main-footer').position().top + footerHeight;
 
       if (footerTop < docHeight) {
-        $('.main-footer').css('position', 'absolute').css('bottom', 0).css('width', '100%');
+        $('.main-footer').css({
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+        });
       } else {
-        $('.main-footer').css('position', 'relative');
+        $('.main-footer').css({
+          position: 'relative',
+        });
       }
     }
 
+    // Llamar a la función al cargar y redimensionar la ventana
     adjustFooter();
     $(window).resize(adjustFooter);
   });

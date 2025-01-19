@@ -2,10 +2,20 @@
 require_once("../header.php");
 require_once("../sidebar.php");
 
-$sentencia = $conexion->prepare("  
-    SELECT u.id AS usuario_id, u.nombre, u.apellido_pat, u.apellido_mat, u.rut, u.dv, u.clave, u.estado
+$sentencia = $conexion->prepare("
+    SELECT 
+        u.id AS usuario_id, 
+        u.nombre, 
+        u.apellido_pat, 
+        u.apellido_mat, 
+        u.rut, 
+        u.dv, 
+        u.clave, 
+        tu.descripcion AS tipo_usuario_descripcion
     FROM usuarios u
+    INNER JOIN tipo_usuario tu ON u.tipo_usuario_id = tu.id
 ");
+
 
 if ($sentencia->execute()) {
     $usuarios = $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -65,7 +75,6 @@ if ($sentencia->execute()) {
                     <th>DV</th>
                     <th>Clave</th>
                     <th>Tipo de Usuario</th>
-                    <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -80,9 +89,8 @@ if ($sentencia->execute()) {
                         <td><?= $usuario['dv'] ?></td>
                         <td><?= $usuario['clave'] ?></td>
                         <td><?= $usuario['tipo_usuario_descripcion'] ?></td>
-                        <td><?= $usuario['estado'] ?></td>
                         <td>
-                            <a href="editar_usuario.php?id=<?= $usuario['usuario_id'] ?>" class="btn btn-primary">Editar</a>
+                            <a href="editar_usuario.php?id=<?= $usuario['usuario_id'] ?>" class="btn btn-warning">Editar</a>
                             <button class="btn btn-danger" onclick="confirmarEliminacion(<?= $usuario['usuario_id'] ?>)">Eliminar</button>
                         </td>
                     </tr>

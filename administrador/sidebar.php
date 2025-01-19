@@ -42,6 +42,18 @@
                       <p>Crear Tipo de Usuario</p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="listado_usuarios.php" class="nav-link">
+                      <i class="fa-solid fa-user-friends"></i>
+                      <p>Listado de Usuarios</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="listado_tipo_usuario.php" class="nav-link">
+                      <i class="fa-solid fa-user-friends"></i>
+                      <p>Listado de Tipos de Usuario</p>
+                    </a>
+                  </li>
                 </ul>
                   </a>
                 </li>
