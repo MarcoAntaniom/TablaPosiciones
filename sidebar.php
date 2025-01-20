@@ -6,7 +6,7 @@ if(isset($_SESSION["tipo_usuario_id"])){
         include("administrador/sidebar.php");
     }
     else if($tipo_usuario_id == 2){
-        include("usuario/sidebar.php");
+        include("entrenadores/entrenador_colo/sidebar.php");
     }
     else if($tipo_usuario_id == 3){
         include("administrador/sidebar.php");

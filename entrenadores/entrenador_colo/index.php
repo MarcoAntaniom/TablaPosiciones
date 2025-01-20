@@ -1,20 +1,11 @@
 <?php
-require_once("../header.php");
-require_once("../sidebar.php");
-require_once("../funciones.php");
+require_once("../../header.php");
+require_once("../../sidebar.php");
+require_once("../../funciones.php");
 
 //Llama al function que tiene a la tabla de posiciones automática
 $tabla_posiciones = obtenerPosiciones($conexion);
 
-?>
-
-<?php
-// Consulta para contar todas las fechas en la tabla 'fechas'
-$consultaFechas = "SELECT COUNT(*) AS total_fechas FROM fechas";
-
-// Ejecutar la consulta y obtener el resultado
-$resultado = $conexion->query($consultaFechas);
-$totalFechas = $resultado->fetch(PDO::FETCH_ASSOC)['total_fechas'] ?? 0;
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -93,7 +84,7 @@ $totalFechas = $resultado->fetch(PDO::FETCH_ASSOC)['total_fechas'] ?? 0;
           <div class="col-12 col-sm-6 col-md-3">
             <a href="copa_chile.php">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-dark elevation-1"><img src="../Logo-Copa-Chile.svg" alt="Copa Chile" width="50" height="60"></span>
+              <span class="info-box-icon bg-dark elevation-1"><img src="../../Logo-Copa-Chile.svg" alt="Copa Chile" width="50" height="60"></span>
 
               <div class="info-box-content">
                 <span class="info-box-text">Copa Chile</span>
@@ -149,7 +140,7 @@ $totalFechas = $resultado->fetch(PDO::FETCH_ASSOC)['total_fechas'] ?? 0;
         <?php foreach ($tabla_posiciones as $fila): ?>
             <tr>
                 <td>
-                    <img src="../escudos/<?= htmlspecialchars($fila['escudo']) ?>" alt="Escudo" style="width: 30px; height: 30px; margin-right: 10px;">
+                    <img src="../../escudos/<?= htmlspecialchars($fila['escudo']) ?>" alt="Escudo" style="width: 30px; height: 30px; margin-right: 10px;">
                     <?= htmlspecialchars($fila['equipo']) ?>
                 </td>
                 <td><?= $fila['partidos_jugados'] ?></td>
@@ -383,4 +374,4 @@ $totalFechas = $resultado->fetch(PDO::FETCH_ASSOC)['total_fechas'] ?? 0;
   </aside>
   <!-- /.control-sidebar -->
 
-<?php require_once("../footer.php"); ?>
+<?php require_once("../../footer.php"); ?>

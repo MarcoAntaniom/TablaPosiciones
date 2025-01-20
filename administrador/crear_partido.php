@@ -140,4 +140,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!-- /.control-sidebar -->
 
 <!-- Main Footer -->
-<?php require_once("footer.php"); ?>
+<?php require_once("../footer.php"); ?>

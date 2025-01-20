@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     header("Location: administrador/index.php");
                     exit;
                 } elseif ($_SESSION['tipo_usuario_id'] == '2') {
-                    header("Location: entrenadores/index.php");
+                    header("Location: entrenadores/entrenador_colo_colo/index.php");
                     exit;
                 } elseif ($_SESSION['tipo_usuario_id'] == '3') {
                     header("Location: usuarios/index.php");
