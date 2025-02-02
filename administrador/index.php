@@ -164,6 +164,9 @@ $totalFechas = $resultado->fetch(PDO::FETCH_ASSOC)['total_fechas'] ?? 0;
         <?php endforeach; ?>
     </tbody>
 </table>
+<a href="../PDFs/tabla_posiciones_pdf.php" class="btn btn-danger">
+    <i class="fas fa-file-pdf"></i> Descargar Tabla de Posiciones
+</a>
               <!-- TERMINO DE TABLA DE POSICIONES -->
                 </div>
                 <!-- /.table-responsive -->

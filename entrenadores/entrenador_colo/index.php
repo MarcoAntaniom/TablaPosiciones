@@ -8,6 +8,14 @@ $tabla_posiciones = obtenerPosiciones($conexion);
 
 ?>
 
+<style>
+    .highlight {
+        background-color: #f9c74f !important; /* Fondo amarillo */
+        font-weight: bold; /* Texto en negrita */
+        color: #fff; /* Texto blanco */
+    }
+</style>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -138,19 +146,19 @@ $tabla_posiciones = obtenerPosiciones($conexion);
     </thead>
     <tbody>
         <?php foreach ($tabla_posiciones as $fila): ?>
-            <tr>
+            <tr class="<?= $fila['equipo_id'] == $_SESSION['equipo_id'] ? 'highlight' : '' ?>">
                 <td>
                     <img src="../../escudos/<?= htmlspecialchars($fila['escudo']) ?>" alt="Escudo" style="width: 30px; height: 30px; margin-right: 10px;">
                     <?= htmlspecialchars($fila['equipo']) ?>
                 </td>
-                <td><?= $fila['partidos_jugados'] ?></td>
-                <td><?= $fila['victorias'] ?></td>
-                <td><?= $fila['empates'] ?></td>
-                <td><?= $fila['derrotas'] ?></td>
-                <td><?= $fila['goles_a_favor'] ?></td>
-                <td><?= $fila['goles_en_contra'] ?></td>
-                <td><?= $fila['diferencia_goles'] ?></td>
-                <td><?= $fila['puntos'] ?></td>
+                <td><?= htmlspecialchars($fila['partidos_jugados']) ?></td>
+                <td><?= htmlspecialchars($fila['victorias']) ?></td>
+                <td><?= htmlspecialchars($fila['empates']) ?></td>
+                <td><?= htmlspecialchars($fila['derrotas']) ?></td>
+                <td><?= htmlspecialchars($fila['goles_a_favor']) ?></td>
+                <td><?= htmlspecialchars($fila['goles_en_contra']) ?></td>
+                <td><?= htmlspecialchars($fila['diferencia_goles']) ?></td>
+                <td><?= htmlspecialchars($fila['puntos']) ?></td>
             </tr>
         <?php endforeach; ?>
     </tbody>

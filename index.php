@@ -17,7 +17,7 @@ switch ($tipo_usuario_id) {
         header("Location: administrador/index.php");
         break;
     case 2: // Usuario
-        header("Location: usuario/dashboard.php");
+        header("Location: entrenadores/entrenador_colo/index.php");
         break;
     default:
         // Si el tipo de usuario no es reconocido, redirigir al login

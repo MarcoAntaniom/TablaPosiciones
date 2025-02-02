@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("conexion.php"); 
+include("conexion.php");
 
 if (!$conexion) {
     die("Error en la conexión a la base de datos: " . $conexion->errorInfo());
@@ -16,12 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     try {
-        $query = "SELECT u.*, tu.id AS tipo_usuario_id, tu.descripcion AS tipo_usuario
+        $query = "SELECT u.*, tu.id AS tipo_usuario_id, tu.descripcion AS tipo_usuario, u.equipo_id
                   FROM usuarios u
                   LEFT JOIN tipo_usuario tu ON u.tipo_usuario_id = tu.id
                   WHERE u.rut = :rut";
         $stmt = $conexion->prepare($query);
-        $stmt->bindParam(":rut", $rut);
+        $stmt->bindParam(":rut", $rut, PDO::PARAM_INT);
         $stmt->execute();
 
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -29,9 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($usuario) {
             if ($password === $usuario['clave']) {
                 // Crear variables de sesión
-                $_SESSION['id_usuario'] = $usuario['id_usuario'];
+                $_SESSION['id_usuario'] = $usuario['id'];
                 $_SESSION['tipo_usuario_id'] = $usuario['tipo_usuario_id'];
                 $_SESSION['rut'] = $usuario['rut'];
+                $_SESSION['equipo_id'] = $usuario['equipo_id'];
                 $_SESSION['logueado'] = true;
 
                 // Redirigir según el tipo de usuario
@@ -39,8 +40,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     header("Location: administrador/index.php");
                     exit;
                 } elseif ($_SESSION['tipo_usuario_id'] == '2') {
-                    header("Location: entrenadores/entrenador_colo_colo/index.php");
-                    exit;
+                    if ($_SESSION['equipo_id']) {
+                        // Si el entrenador tiene equipo asociado, redirige al apartado de entrenadores
+                        header("Location: entrenadores/entrenador_colo/index.php");
+                        exit;
+                    } else {
+                        echo "Error: Este entrenador no tiene un equipo asignado.";
+                    }
                 } elseif ($_SESSION['tipo_usuario_id'] == '3') {
                     header("Location: usuarios/index.php");
                     exit;

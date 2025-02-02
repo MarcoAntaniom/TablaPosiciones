@@ -13,10 +13,14 @@ function obtenerPosiciones($conexion) {
         SUM(CASE WHEN p.goles_local = p.goles_visitante AND (p.equipo_local = e.id OR p.equipo_visitante = e.id) THEN 1 ELSE 0 END) AS empates,
         SUM(CASE WHEN p.equipo_local = e.id AND p.goles_local < p.goles_visitante THEN 1
                  WHEN p.equipo_visitante = e.id AND p.goles_visitante < p.goles_local THEN 1 ELSE 0 END) AS derrotas,
-        SUM(CASE WHEN p.equipo_local = e.id THEN p.goles_local WHEN p.equipo_visitante = e.id THEN p.goles_visitante ELSE 0 END) AS goles_a_favor,
-        SUM(CASE WHEN p.equipo_local = e.id THEN p.goles_visitante WHEN p.equipo_visitante = e.id THEN p.goles_local ELSE 0 END) AS goles_en_contra,
-        SUM(CASE WHEN p.equipo_local = e.id THEN p.goles_local WHEN p.equipo_visitante = e.id THEN p.goles_visitante ELSE 0 END) -
-        SUM(CASE WHEN p.equipo_local = e.id THEN p.goles_visitante WHEN p.equipo_visitante = e.id THEN p.goles_local ELSE 0 END) AS diferencia_goles,
+        SUM(CASE WHEN p.equipo_local = e.id THEN p.goles_local ELSE 0 END) +
+        SUM(CASE WHEN p.equipo_visitante = e.id THEN p.goles_visitante ELSE 0 END) AS goles_a_favor,
+        SUM(CASE WHEN p.equipo_local = e.id THEN p.goles_visitante ELSE 0 END) +
+        SUM(CASE WHEN p.equipo_visitante = e.id THEN p.goles_local ELSE 0 END) AS goles_en_contra,
+        (SUM(CASE WHEN p.equipo_local = e.id THEN p.goles_local ELSE 0 END) +
+         SUM(CASE WHEN p.equipo_visitante = e.id THEN p.goles_visitante ELSE 0 END)) -
+        (SUM(CASE WHEN p.equipo_local = e.id THEN p.goles_visitante ELSE 0 END) +
+         SUM(CASE WHEN p.equipo_visitante = e.id THEN p.goles_local ELSE 0 END)) AS diferencia_goles,
         3 * SUM(CASE WHEN p.equipo_local = e.id AND p.goles_local > p.goles_visitante THEN 1
                      WHEN p.equipo_visitante = e.id AND p.goles_visitante > p.goles_local THEN 1 ELSE 0 END) +
         SUM(CASE WHEN p.goles_local = p.goles_visitante AND (p.equipo_local = e.id OR p.equipo_visitante = e.id) THEN 1 ELSE 0 END) AS puntos
