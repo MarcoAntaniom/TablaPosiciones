@@ -15,15 +15,11 @@ $options = new Options();
 $options->set('defaultFont', 'Arial');
 $options->set('isHtml5ParserEnabled', true);
 $options->set('isPhpEnabled', true);
-$options->set('isRemoteEnabled', true); // Habilitar carga de recursos remotos
+$options->set('isRemoteEnabled', false); // Deshabilitar carga de recursos remotos para evitar problemas
 $dompdf = new Dompdf($options);
 
 // Obtener datos de la tabla de posiciones
 $tabla_posiciones = obtenerPosiciones($conexion);
-
-// Logo de la liga en base64
-$logo_base64 = base64_encode(file_get_contents("http://localhost/TablaPosiciones/Logo.png"));
-$liga_logo = 'data:image/png;base64,' . $logo_base64;
 
 // Generar el contenido HTML del PDF
 $html = '
@@ -33,14 +29,13 @@ $html = '
     <title>Tabla de Posiciones</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
-        h1 { color: #333; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-        th { background-color: #f2f2f2; }
+        h1 { color: #000000; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; border-radius: 10px; overflow: hidden; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; border-radius: 5px; }
+        th { background-color: #007bff; color: white; }
     </style>
 </head>
 <body>
-    <img src="'.$liga_logo.'" alt="Logo de la Liga" style="width: 100px; margin-bottom: 20px;">
     <h1>Tabla de Posiciones</h1>
     <table>
         <tr>
