@@ -97,6 +97,18 @@
                       <p>Actualizar Goles</p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="crear_jugador.php" class="nav-link">
+                      <img src="../iconos/icono-crear-jugador.png" alt="Crear Jugador" class="icono-sidebar" width="30" height="30">
+                      <p>Crear Jugador</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="listado_jugadores.php" class="nav-link">
+                      <img src="../iconos/icono-equipo.png" alt="Listado Jugadores" class="icono-sidebar" width="30" height="30">
+                      <p>Listado Jugadores</p>
+                    </a>
+                  </li>
                 </ul>
               </li>
           </ul>

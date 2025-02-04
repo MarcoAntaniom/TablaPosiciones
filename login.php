@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("conexion.php");
+require_once("conexion.php");
 
 if (!$conexion) {
     die("Error en la conexión a la base de datos: " . $conexion->errorInfo());
@@ -39,15 +39,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($_SESSION['tipo_usuario_id'] == '1') {
                     header("Location: administrador/index.php");
                     exit;
-                } elseif ($_SESSION['tipo_usuario_id'] == '2') {
+                } elseif ($_SESSION['tipo_usuario_id'] == '3') {
                     if ($_SESSION['equipo_id']) {
                         // Si el entrenador tiene equipo asociado, redirige al apartado de entrenadores
-                        header("Location: entrenadores/entrenador_colo/index.php");
+                        header("Location: entrenadores/index.php");
                         exit;
                     } else {
                         echo "Error: Este entrenador no tiene un equipo asignado.";
                     }
-                } elseif ($_SESSION['tipo_usuario_id'] == '3') {
+                } elseif ($_SESSION['tipo_usuario_id'] == '4') {
                     header("Location: usuarios/index.php");
                     exit;
                 } else {

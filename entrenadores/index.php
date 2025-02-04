@@ -1,11 +1,22 @@
 <?php
-require_once("../../header.php");
-require_once("../../sidebar.php");
-require_once("../../funciones.php");
+require_once("../header.php");
+require_once("../sidebar.php");
+require_once("../funciones.php");
 
 //Llama al function que tiene a la tabla de posiciones automática
 $tabla_posiciones = obtenerPosiciones($conexion);
 
+// Obtener el equipo_id del entrenador desde la sesión
+$equipoEntrenador = $_SESSION['equipo_id'] ?? null;
+$cantidadJugadores = 0;
+
+if ($equipoEntrenador) {
+    // Consultar la cantidad de jugadores del equipo
+    $stmt = $conexion->prepare("SELECT COUNT(*) AS total FROM jugadores WHERE equipo_id = ?");
+    $stmt->execute([$equipoEntrenador]);
+    $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+    $cantidadJugadores = $resultado['total'] ?? 0;
+}
 ?>
 
 <style>
@@ -37,15 +48,14 @@ $tabla_posiciones = obtenerPosiciones($conexion);
         <!-- Info boxes -->
         <div class="row">
           <div class="col-12 col-sm-6 col-md-3">
-            <a href="crear_fecha.php">
+            <a href="historial_jugadores.php">
             <div class="info-box">
     <span class="info-box-icon bg-orange elevation-1"><img src="../iconos/icono-crear-fecha.png" alt="Crear Fechas" class="icono-sidebar" width="30" height="30"></span>
 
     <div class="info-box-content">
-        <span class="info-box-text">Crear Fecha</span>
+        <span class="info-box-text">Observar Jugadores</span>
         <span class="info-box-number">
-            <small>Jornada</small>
-            <?php echo $totalFechas; ?>
+          <small>Cantidad De Jugadores: <?= $cantidadJugadores ?></small>
         </span>
     </div>
     <!-- /.info-box-content -->
@@ -92,7 +102,7 @@ $tabla_posiciones = obtenerPosiciones($conexion);
           <div class="col-12 col-sm-6 col-md-3">
             <a href="copa_chile.php">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-dark elevation-1"><img src="../../Logo-Copa-Chile.svg" alt="Copa Chile" width="50" height="60"></span>
+              <span class="info-box-icon bg-dark elevation-1"><img src="../Logo-Copa-Chile.svg" alt="Copa Chile" width="50" height="60"></span>
 
               <div class="info-box-content">
                 <span class="info-box-text">Copa Chile</span>
@@ -148,7 +158,7 @@ $tabla_posiciones = obtenerPosiciones($conexion);
         <?php foreach ($tabla_posiciones as $fila): ?>
             <tr class="<?= $fila['equipo_id'] == $_SESSION['equipo_id'] ? 'highlight' : '' ?>">
                 <td>
-                    <img src="../../escudos/<?= htmlspecialchars($fila['escudo']) ?>" alt="Escudo" style="width: 30px; height: 30px; margin-right: 10px;">
+                    <img src="../escudos/<?= htmlspecialchars($fila['escudo']) ?>" alt="Escudo" style="width: 30px; height: 30px; margin-right: 10px;">
                     <?= htmlspecialchars($fila['equipo']) ?>
                 </td>
                 <td><?= htmlspecialchars($fila['partidos_jugados']) ?></td>
@@ -382,4 +392,4 @@ $tabla_posiciones = obtenerPosiciones($conexion);
   </aside>
   <!-- /.control-sidebar -->
 
-<?php require_once("../../footer.php"); ?>
+<?php require_once("../footer.php"); ?>

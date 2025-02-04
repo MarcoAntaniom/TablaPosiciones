@@ -17,16 +17,14 @@
 
 <!-- REQUIRED SCRIPTS -->
 
-<!-- Bootstrap 4 -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap Bundle JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- AdminLTE -->
 <script src="<?php echo $rutaBase; ?>dist/js/adminlte.js"></script>
 
-<!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- DataTables  & Plugins -->
 <script src="<?php echo $rutaBase; ?>plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="<?php echo $rutaBase; ?>plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
