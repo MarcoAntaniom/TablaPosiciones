@@ -1,79 +1,180 @@
-<?php
-session_start();
-require_once("../conexion.php");
+<?php require_once("../header.php"); ?>
+<?php require_once("../sidebar.php"); ?>
 
-// Asegúrate de que el equipo_id está en la sesión
-if (isset($_SESSION['equipo_id'])) {
+<style>
+    .carousel-container {
+        display: flex;
+        overflow: hidden;
+        width: 100%;
+        position: relative;
+        height: 300px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+    .carousel-slide {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        transition: flex 0.5s ease;
+    }
+    .carousel-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    .carousel-slide:hover {
+        flex: 2;
+    }
+    .carousel-slide:hover img {
+        transform: scale(1.1);
+    }
+    .player-info {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 14px;
+        opacity: 0; /* Ocultar por defecto */
+        transition: opacity 0.3s ease; /* Añadir transición para el efecto */
+        text-align: center;
+    }
+    .carousel-slide:hover .player-info {
+        opacity: 1; /* Mostrar al pasar el mouse */
+    }
+</style>
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Listado Jugadores</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="index.php">Inicio</a></li>
+            <li class="breadcrumb-item active">Listado Jugadores</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-header">
+
+        <div class="card-tools">
+          <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <!-- Aquí iría el contenido que deseas mostrar -->
+         <?php
+        if (isset($_SESSION['equipo_id'])) {
     $equipo_id = $_SESSION['equipo_id'];
 
     try {
-        // Consulta para obtener los jugadores del equipo actual
-        $sql = "SELECT id, nombre, imagen FROM jugadores WHERE equipo_id = :equipo_id";
+        $sql = "SELECT id, nombre, imagen, posicion FROM jugadores WHERE equipo_id = :equipo_id ORDER BY 
+                CASE 
+                    WHEN posicion IN ('Portero (PT)') THEN 1 
+                    WHEN posicion IN ('Defensa Central (CT)', 'Lateral Izquierdo (LI)', 'Lateral Derecho (LD)') THEN 2 
+                    WHEN posicion IN ('Medio Centro (MC)', 'Medio Centro Defensivo (MCD)', 'Media Punta (MP)', 'Interior Izquierdo (II)', 'Interior Derecho (ID)') THEN 3 
+                    WHEN posicion IN ('Delantero Centro (DC)', 'Extremo Izquierdo (EI)', 'Extremo Derecho (ED)') THEN 4 
+                    ELSE 5 
+                END";
         
         $stmt = $conexion->prepare($sql);
         $stmt->bindParam(':equipo_id', $equipo_id, PDO::PARAM_INT);
         $stmt->execute();
 
-        // Verificar si se encontraron jugadores
         if ($stmt->rowCount() > 0) {
-            echo "<h2>Jugadores del equipo</h2>";
-            echo "<ul>";
-            // Mostrar los jugadores con sus fotos
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                echo "<li>";
-                echo "<img src='" . htmlspecialchars($row['imagen']) . "' alt='" . htmlspecialchars($row['nombre']) . "' width='100' height='100'> ";
-                echo htmlspecialchars($row['nombre']);
-                echo "</li>";
-            }
-            echo "</ul>";
-        } else {
-            echo "No se encontraron jugadores para este equipo.";
-        }
+            $jugadores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $categorias = [
+                'Porteros' => ['Portero (PT)'],
+                'Defensas' => ['Defensa Central (CT)', 'Lateral Izquierdo (LI)', 'Lateral Derecho (LD)'],
+                'Mediocampistas' => ['Medio Centro (MC)', 'Medio Centro Defensivo (MCD)', 'Media Punta (MP)', 'Interior Izquierdo (II)', 'Interior Derecho (ID)'],
+                'Delanteros' => ['Delantero Centro (DC)', 'Extremo Izquierdo (EI)', 'Extremo Derecho (ED)']
+            ];
 
+            echo "<div class='container-fluid'>";
+            foreach ($categorias as $categoria => $posiciones) {
+                $filtrados = array_filter($jugadores, function ($jugador) use ($posiciones) {
+                    return in_array($jugador['posicion'], $posiciones);
+                });
+                
+                if (!empty($filtrados)) {
+                    echo "<h3 class='mt-3'>$categoria</h3>";
+                    echo "<div class='carousel-container'>";
+                    foreach ($filtrados as $row) {
+                        echo "<div class='carousel-slide'>";
+                        echo "<img src='" . htmlspecialchars($row['imagen']) . "' class='img-fluid' alt='" . htmlspecialchars($row['nombre']) . "'>";
+                        echo "<div class='player-info'>" . htmlspecialchars($row['nombre']) . "<br>" . htmlspecialchars($row['posicion']) . "</div>";
+                        echo "</div>";
+                    }
+                    echo "</div>";
+                }
+            }
+            echo "</div>";
+        } else {
+            echo "<p class='text-center text-muted'>No se encontraron jugadores para este equipo.</p>";
+        }
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        echo "<p class='text-danger text-center'>Error: " . $e->getMessage() . "</p>";
     }
 } else {
-    echo "No hay un equipo seleccionado en la sesión.";
+    echo "<p class='text-center text-warning'>No hay un equipo seleccionado en la sesión.</p>";
 }
 ?>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer">
+        Footer
+      </div>
+      <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-    }
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
 
-    .jugadores-lista {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        padding: 20px;
-        justify-content: center;
-    }
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+  <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->
 
-    .jugador {
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 10px;
-        text-align: center;
-        width: 150px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const slides = document.querySelectorAll(".carousel-slide");
+        slides.forEach(slide => {
+            slide.addEventListener("mouseover", () => {
+                slides.forEach(s => s.style.flex = "1");
+                slide.style.flex = "2";
+            });
+            slide.addEventListener("mouseout", () => {
+                slides.forEach(s => s.style.flex = "1");
+            });
+        });
+    });
+</script>
 
-    .foto-jugador {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-    .nombre-jugador {
-        margin-top: 10px;
-        font-size: 16px;
-        font-weight: bold;
-    }
-</style>
+<!-- Main Footer -->
+<?php require_once("../footer.php"); ?>
